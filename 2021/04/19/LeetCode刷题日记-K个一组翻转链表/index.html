@@ -27,16 +27,16 @@
 <meta property="og:site_name" content="LeoL&#39;s Bolg">
 <meta property="og:description" content="今天刷到LeetCode第25题，记录一下刷题的思路，方便以后回看。（真的一周不写就容易忘啊，所以还是要多练） 这个题大概有三种解法：  借助栈先进后出的思路，当链表元素k个一组放进栈中，然后在拿出来。（缺点是时间复杂度较高，入栈出栈都要遍历链表，不推荐，了解思路即可）。 递归：k个一组进行递归，具体思路请参考后面图解。 迭代：同上，参考后面图解。  话不多说，先上代码：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/image/revcure.jpg">
-<meta property="og:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/image/foreach.jpg">
+<meta property="og:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/revcure.jpg">
+<meta property="og:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/foreach.jpg">
 <meta property="article:published_time" content="2021-04-19T15:28:27.000Z">
-<meta property="article:modified_time" content="2021-04-19T17:13:08.150Z">
+<meta property="article:modified_time" content="2021-04-19T17:24:01.939Z">
 <meta property="article:author" content="Leo Liang">
 <meta property="article:tag" content="‘LeetCode’">
 <meta property="article:tag" content="日记">
 <meta property="article:tag" content="链表">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/image/revcure.jpg">
+<meta name="twitter:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/revcure.jpg">
 
 <link rel="canonical" href="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/">
 
@@ -202,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 01:13:08" itemprop="dateModified" datetime="2021-04-20T01:13:08+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 01:24:01" itemprop="dateModified" datetime="2021-04-20T01:24:01+08:00">2021-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,7 +267,7 @@
 
 <p>这块不是那么好理解，碰到这种情况一般画个图，问题就迎刃而解了~</p>
 <p>以head = [1,2,3,4,5], k = 3为例，图画的可能有点丑，但是可能会对你有点帮助。</p>
-<p><img src="image/revcure.jpg"></p>
+<p><img src="revcure.jpg"></p>
 <p>这里k=3，因此只会循环三次，当最后循环完curr的位置是在头结点，head的位置在temp，因此后面需要将head=curr。最后返回head即可。</p>
 <h4 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//        统计链表长度</span></span><br><span class="line">        <span class="keyword">for</span> (ListNode i = head; i != <span class="keyword">null</span>; n++, i = i.next);</span><br><span class="line"></span><br><span class="line">        ListNode dmy = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">        dmy.next = head;</span><br><span class="line">        <span class="keyword">for</span>(ListNode prev = dmy, tail = head; n &gt;= k; n -= k) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; k; i++) &#123;</span><br><span class="line">                ListNode next = tail.next.next;</span><br><span class="line">                tail.next.next = prev.next;</span><br><span class="line">                prev.next = tail.next;</span><br><span class="line">                tail.next = next;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            prev = tail;</span><br><span class="line">            tail = tail.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dmy.next;</span><br></pre></td></tr></table></figure>
 
@@ -277,11 +277,11 @@
 <p><code>for(ListNode prev = dmy, tail = head; n &gt;= k; n -= k)</code>这块代码是将链表按k个一组开始进行翻转。</p>
 <p>里面的<code>for (int i = 1; i &lt; k; i++)</code>这里是从1开始而不是0开始，感觉会少循环一次。我是这么理解的，当有k个数，其实真正翻转的时候只会翻转k-1次，这里1是没问题的。</p>
 <p>具体的循环思路可以参考下图，画的有点乱，我相信你能看懂的~</p>
-<p><img src="image/foreach.jpg"></p>
+<p><img src="foreach.jpg"></p>
 <p>在k个一组翻转完会将prev和tail进行重新赋值，在进行下一轮。</p>
 <p>最后返回的是最开始的head节点位置，只是由于head现在已经移动不知道到哪里去了，所以用的是dummy.next，其实就是最开始的head位置。</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>这三个解法主要掌握递归和迭代即可，栈那个其实没啥意义，时间复杂度太高，实际很难用到，除非什么特殊场景。</p>
-<p>迭代和递归写法其实都很绕，经常会出现今天会写，过一周看又有点不会了，所以多看多写吧，没啥办法，加油！<del>_</del></p>
+<p>迭代和递归写法其实都很绕，经常会出现今天会写，过一周看又有点不会了，所以多看多写吧，没啥办法，加油！</p>
 
     </div>
 
