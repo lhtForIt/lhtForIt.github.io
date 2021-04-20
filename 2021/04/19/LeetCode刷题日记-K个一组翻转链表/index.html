@@ -27,16 +27,16 @@
 <meta property="og:site_name" content="LeoL&#39;s Bolg">
 <meta property="og:description" content="今天刷到LeetCode第25题，记录一下刷题的思路，方便以后回看。（真的一周不写就容易忘啊，所以还是要多练） 这个题大概有三种解法：  借助栈先进后出的思路，当链表元素k个一组放进栈中，然后在拿出来。（缺点是时间复杂度较高，入栈出栈都要遍历链表，不推荐，了解思路即可）。 递归：k个一组进行递归，具体思路请参考后面图解。 迭代：同上，参考后面图解。  话不多说，先上代码：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/revcure.jpg">
-<meta property="og:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/foreach.jpg">
+<meta property="og:image" content="http://example.com/.com//revcure.jpg">
+<meta property="og:image" content="http://example.com/.com//foreach.jpg">
 <meta property="article:published_time" content="2021-04-19T15:28:27.000Z">
-<meta property="article:modified_time" content="2021-04-19T17:24:01.939Z">
+<meta property="article:modified_time" content="2021-04-20T14:20:54.809Z">
 <meta property="article:author" content="Leo Liang">
 <meta property="article:tag" content="‘LeetCode’">
 <meta property="article:tag" content="日记">
 <meta property="article:tag" content="链表">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/revcure.jpg">
+<meta name="twitter:image" content="http://example.com/.com//revcure.jpg">
 
 <link rel="canonical" href="http://example.com/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/">
 
@@ -202,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 01:24:01" itemprop="dateModified" datetime="2021-04-20T01:24:01+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 22:20:54" itemprop="dateModified" datetime="2021-04-20T22:20:54+08:00">2021-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -211,10 +211,6 @@
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">链表</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%93%BE%E8%A1%A8/%E2%80%99%E7%AC%94%E8%AE%B0%E2%80%98/" itemprop="url" rel="index"><span itemprop="name">’笔记‘</span></a>
                 </span>
             </span>
 
@@ -254,7 +250,12 @@
 
 <p>你按照我的思路来想其实就会简单很多，<strong>当xx.next在表达式左边的时候，就只有一个含义，xx的下一个节点指向表达式右边的位置</strong>。</p>
 <p>如<code>head.next=next.next;</code>就是指head指向next的下一个节点。你这样去梳理下以前看着比较懵逼的代码就会清晰很多。反正我思路是清晰很多。</p>
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5><h4 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">ListNode curr = head;</span><br><span class="line"><span class="keyword">while</span> (curr != <span class="keyword">null</span> &amp;&amp; count &lt; k) &#123;</span><br><span class="line">    curr = curr.next;</span><br><span class="line">    count++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (count == k) &#123;</span><br><span class="line">    curr = reverseKGroup(curr, k);</span><br><span class="line">    <span class="keyword">while</span> (count-- &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        ListNode temp = head.next;</span><br><span class="line">        head.next = curr;</span><br><span class="line">        curr = head;</span><br><span class="line">        head = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    head = curr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> head;</span><br></pre></td></tr></table></figure>
+<p>3、一旦A.next=B之后，代表A以前指向的位置指针已经断开，现在指向B了。如果后续还需要用以前A.next的节点话就需要提前记录下来。因此就会在链表了经常出现下面这种代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ListNode next = tail.next.next;</span><br><span class="line">tail.next.next = prev.next;</span><br><span class="line">prev.next = tail.next;</span><br><span class="line">tail.next = next;</span><br></pre></td></tr></table></figure>
+
+<p>因为tail.next.next在第二行断开了，第四行有需要用到，所以会提前用Next把tail.next.next存起来。</p>
+<p><strong>第三点乍看和第一点很像，但是还是有细微区别的，一个是指针移动的记录，一个是指针断开的记录。</strong></p>
+<h4 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">ListNode curr = head;</span><br><span class="line"><span class="keyword">while</span> (curr != <span class="keyword">null</span> &amp;&amp; count &lt; k) &#123;</span><br><span class="line">    curr = curr.next;</span><br><span class="line">    count++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (count == k) &#123;</span><br><span class="line">    curr = reverseKGroup(curr, k);</span><br><span class="line">    <span class="keyword">while</span> (count-- &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        ListNode temp = head.next;</span><br><span class="line">        head.next = curr;</span><br><span class="line">        curr = head;</span><br><span class="line">        head = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    head = curr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> head;</span><br></pre></td></tr></table></figure>
 
 <p>代码其实还是很清晰的，我们一点一点来理一下。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">ListNode curr = head;</span><br><span class="line"><span class="keyword">while</span> (curr != <span class="keyword">null</span> &amp;&amp; count &lt; k) &#123;</span><br><span class="line">    curr = curr.next;</span><br><span class="line">    count++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -267,7 +268,7 @@
 
 <p>这块不是那么好理解，碰到这种情况一般画个图，问题就迎刃而解了~</p>
 <p>以head = [1,2,3,4,5], k = 3为例，图画的可能有点丑，但是可能会对你有点帮助。</p>
-<p><img src="revcure.jpg"></p>
+<p><img src="/.com//revcure.jpg"></p>
 <p>这里k=3，因此只会循环三次，当最后循环完curr的位置是在头结点，head的位置在temp，因此后面需要将head=curr。最后返回head即可。</p>
 <h4 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//        统计链表长度</span></span><br><span class="line">        <span class="keyword">for</span> (ListNode i = head; i != <span class="keyword">null</span>; n++, i = i.next);</span><br><span class="line"></span><br><span class="line">        ListNode dmy = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">        dmy.next = head;</span><br><span class="line">        <span class="keyword">for</span>(ListNode prev = dmy, tail = head; n &gt;= k; n -= k) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; k; i++) &#123;</span><br><span class="line">                ListNode next = tail.next.next;</span><br><span class="line">                tail.next.next = prev.next;</span><br><span class="line">                prev.next = tail.next;</span><br><span class="line">                tail.next = next;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            prev = tail;</span><br><span class="line">            tail = tail.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dmy.next;</span><br></pre></td></tr></table></figure>
 
@@ -277,7 +278,10 @@
 <p><code>for(ListNode prev = dmy, tail = head; n &gt;= k; n -= k)</code>这块代码是将链表按k个一组开始进行翻转。</p>
 <p>里面的<code>for (int i = 1; i &lt; k; i++)</code>这里是从1开始而不是0开始，感觉会少循环一次。我是这么理解的，当有k个数，其实真正翻转的时候只会翻转k-1次，这里1是没问题的。</p>
 <p>具体的循环思路可以参考下图，画的有点乱，我相信你能看懂的~</p>
-<p><img src="foreach.jpg"></p>
+<p><img src="/.com//foreach.jpg"></p>
+<p>一开始prev和tail是相邻的，<code>tail.next.next=prev.next</code>其实就是指将tail的下一个节点指向prev的下一个节点，注意是tail的下一个节点不是tail。</p>
+<p>然后<code>prev.next=tail.next</code>是指prev指向tail的下一个节点。</p>
+<p><code>tail.next=next</code>是指tail指向原来tail.next.next位置，这里不直接用tail.next.next是因为这个指针现在已经断掉了，所以用实现保存好的next。</p>
 <p>在k个一组翻转完会将prev和tail进行重新赋值，在进行下一轮。</p>
 <p>最后返回的是最开始的head节点位置，只是由于head现在已经移动不知道到哪里去了，所以用的是dummy.next，其实就是最开始的head位置。</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>这三个解法主要掌握递归和迭代即可，栈那个其实没啥意义，时间复杂度太高，实际很难用到，除非什么特殊场景。</p>
@@ -302,10 +306,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/04/16/test-B-Tree/" rel="prev" title="test B+ Tree">
-      <i class="fa fa-chevron-left"></i> test B+ Tree
+    <a href="/2021/04/16/test-B-Tree/" rel="prev" title="B+ Tree">
+      <i class="fa fa-chevron-left"></i> B+ Tree
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/20/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E8%AE%BE%E8%AE%A1%E5%BE%AA%E7%8E%AF%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97/" rel="next" title="LeetCode刷题日记-设计循环双端队列">
+      LeetCode刷题日记-设计循环双端队列 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -364,7 +371,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%80%9F%E5%8A%A9%E6%A0%88"><span class="nav-number">1.</span> <span class="nav-text">借助栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9C%8B%E9%93%BE%E8%A1%A8%E4%BB%A3%E7%A0%81%E7%9A%84%E5%87%A0%E4%B8%AA%E9%87%8D%E7%82%B9%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">看链表代码的几个重点思路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92"><span class="nav-number">3.</span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3"><span class="nav-number">4.</span> <span class="nav-text">迭代</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">5.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%80%9F%E5%8A%A9%E6%A0%88"><span class="nav-number">1.</span> <span class="nav-text">借助栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9C%8B%E9%93%BE%E8%A1%A8%E4%BB%A3%E7%A0%81%E7%9A%84%E5%87%A0%E4%B8%AA%E9%87%8D%E7%82%B9%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">看链表代码的几个重点思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92"><span class="nav-number">3.</span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3"><span class="nav-number">4.</span> <span class="nav-text">迭代</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">5.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -378,17 +385,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">分类</span>
+            <a href="/categories">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
