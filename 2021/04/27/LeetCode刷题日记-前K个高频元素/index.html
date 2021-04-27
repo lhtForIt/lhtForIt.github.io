@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前K个高频元素，这是一个很有代表性的问题，在实际生活中的应用场景其实也很多，比如微博里每天统计实时热点信息等。 先看下题： 12345678给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。示例 1:输入: nums &#x3D; [1,1,1,2,2,3], k &#x3D; 2输出: [1,2]进阶：你所设计算法的时间复杂度 必须 优于 O(n lo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode刷题日记-前K个高频元素">
+<meta property="og:url" content="http://example.com/2021/04/27/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E5%89%8DK%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/index.html">
+<meta property="og:site_name" content="LeoL&#39;s Bolg">
+<meta property="og:description" content="前K个高频元素，这是一个很有代表性的问题，在实际生活中的应用场景其实也很多，比如微博里每天统计实时热点信息等。 先看下题： 12345678给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。示例 1:输入: nums &#x3D; [1,1,1,2,2,3], k &#x3D; 2输出: [1,2]进阶：你所设计算法的时间复杂度 必须 优于 O(n lo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-27T15:32:56.000Z">
+<meta property="article:modified_time" content="2021-04-27T16:36:17.521Z">
+<meta property="article:author" content="Leo Liang">
+<meta property="article:tag" content="堆">
+<meta property="article:tag" content="哈希表">
+<meta property="article:tag" content="排序">
+<meta property="article:tag" content="桶">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/27/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E5%89%8DK%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LeetCode刷题日记-前K个高频元素 | LeoL's Bolg</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LeoL's Bolg</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">LeoL的博客啊</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/27/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E5%89%8DK%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Leo Liang">
+      <meta itemprop="description" content="你的努力程度决定你能走多远">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LeoL's Bolg">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode刷题日记-前K个高频元素
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-27 23:32:56" itemprop="dateCreated datePublished" datetime="2021-04-27T23:32:56+08:00">2021-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-28 00:36:17" itemprop="dateModified" datetime="2021-04-28T00:36:17+08:00">2021-04-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前K个高频元素，这是一个很有代表性的问题，在实际生活中的应用场景其实也很多，比如微博里每天统计实时热点信息等。</p>
+<p>先看下题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。</span><br><span class="line"></span><br><span class="line">示例 <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">输入: nums = [<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>], k = <span class="number">2</span></span><br><span class="line">输出: [<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>这道题的进阶要求时间复杂度要优于O(nlogn)，那一般的快排，归并等就可以抛弃了。</p>
+<p>而对于logn这个时间复杂度我们能很快速的联想到二分，二叉搜索树和堆。前两个想了下本场景适用不了。</p>
+<h4 id="运用堆"><a href="#运用堆" class="headerlink" title="运用堆"></a>运用堆</h4><p>因此我们来推导下堆是否可以小于O(nlogn)？答案是肯定的，堆可以在O(nlogk)(k&lt;n)的时间复杂度下等到结果.</p>
+<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><p>那除了堆，我们还有其他办法解决么？当然是有的，那就是桶排序。</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>我们来理一下为什么可以用堆和桶排序两种实现得到答案。我的推导过程如下，大家可以当做参考，有好的方案也欢迎和我讨论。</p>
+<p>首先要统计前k个高频元素，我们必须至少要将整个数组遍历一次。这个我们很快就想到Map去记录每个元素出现的次数，这个在<strong>字母异位词</strong>那题里面做过。</p>
+<p>然后需要去从Map里面的value进行排序，排序后从大到小的前k个元素就是结果。而造成解法差异就是在排序的实现上。</p>
+<p>你可以是各种排序，快排，归并，插入，桶，冒泡，希尔，堆排序等，而各种排序的时间复杂度决定了最后的时间复杂度。</p>
+<p>然后由于在各个排序里小于进阶要求O(nlogn)的就只有堆排序的O(nlogk)和桶排序的O(n).</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><h4 id="法一"><a href="#法一" class="headerlink" title="法一"></a>法一</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] topK = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line">Map&lt;Integer, Integer&gt; countMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="comment">//第一个为数组值，第二个为出现次数</span></span><br><span class="line">PriorityQueue&lt;<span class="keyword">int</span>[]&gt; priQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1,o2)-&gt;(o2[<span class="number">1</span>]-o1[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> num : nums) &#123;</span><br><span class="line">    countMap.put(num, countMap.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;Integer, Integer&gt; entry : countMap.entrySet()) &#123;</span><br><span class="line">    <span class="keyword">int</span> value = entry.getKey(), count = entry.getValue();</span><br><span class="line"></span><br><span class="line">    priQueue.offer(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;value, count&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">    topK[i] = priQueue.poll()[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> topK;</span><br></pre></td></tr></table></figure>
+
+<p>这个是我一开始写的一种错误的写法，应该是初学者比较容易犯的错误。**这个解法的时间复杂度是O(nlogn)而不是O(nlogk)**，至于为什么，看下一个解法我会说明。而且这里面<code>PriorityQueue</code>的泛型类型用的是<code>int[]</code>，这个写的其实还是有点不优雅的，没必要新开结构去记录，直接用现有的<code>Map.Entry&lt;Integer,Integer&gt;</code>即可。</p>
+<h4 id="法二"><a href="#法二" class="headerlink" title="法二"></a>法二</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] topK = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line">Map&lt;Integer, Integer&gt; countMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="comment">//第一个为数组值，第二个为出现次数</span></span><br><span class="line">PriorityQueue&lt;<span class="keyword">int</span>[]&gt; priQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1,o2)-&gt;(o1[<span class="number">1</span>]-o2[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> num : nums) &#123;</span><br><span class="line">    countMap.put(num, countMap.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;Integer, Integer&gt; entry : countMap.entrySet()) &#123;</span><br><span class="line">    <span class="keyword">int</span> value = entry.getKey(), count = entry.getValue();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//始终保持堆里只有k个元素，这样logk速度会快点</span></span><br><span class="line">    <span class="keyword">if</span> (priQueue.size() &lt; k) &#123;</span><br><span class="line">        priQueue.offer(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;value, count&#125;);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (priQueue.peek()[<span class="number">1</span>] &lt; count) &#123;</span><br><span class="line">            priQueue.poll();</span><br><span class="line">            priQueue.offer(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;value, count&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">    topK[i] = priQueue.poll()[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> topK;</span><br></pre></td></tr></table></figure>
+
+<p>法二和法一的区别在于，法一是构建大顶堆，将n个元素都装进堆<code>PriorityQueue</code>中，这样整个建堆的时间复杂度是O(nlogn)，而法二是构架小顶堆，然后保持堆里面的元素始终只有k个，大于k个会先将堆顶元素出堆在将其他元素入堆。</p>
+<p><strong>对于在O(nlogk)的复杂度到底用大顶堆还是小顶堆是怎么确定的呢？我是这么记得，如果是要得到前k大的数，那就要构建小顶堆，然后不断将大于堆顶的数放进小顶堆，最后堆里剩下的就是最大的k个数了；反之亦然。</strong></p>
+<h4 id="法三"><a href="#法三" class="headerlink" title="法三"></a>法三</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (nums.length == <span class="number">0</span> || nums.length &lt; k) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Map&lt;Integer, Integer&gt; numsMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> num : nums) &#123;</span><br><span class="line">    numsMap.put(num, numsMap.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PriorityQueue&lt;Map.Entry&lt;Integer, Integer&gt;&gt; pri = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1, o2) -&gt; o1.getValue() - o2.getValue());</span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;Integer, Integer&gt; num : numsMap.entrySet()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (pri.size() &lt; k) &#123;</span><br><span class="line">        pri.offer(num);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pri.peek().getValue() &lt; num.getValue()) &#123;</span><br><span class="line">        pri.poll();</span><br><span class="line">        pri.offer(num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">    res[i] = pri.poll().getKey();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> res;</span><br></pre></td></tr></table></figure>
+
+<p>法三是<code>Map.Entry&lt;Integer,Integer&gt;</code>实现，这样代码会简洁很多，可读性好很多。</p>
+<p>下面发四是从其他地方看到的实现方法，看看和法三有什么不同呢？</p>
+<p>我一开始看到也想了一会才发现实现思路。</p>
+<h4 id="法四"><a href="#法四" class="headerlink" title="法四"></a>法四</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> n : nums) &#123;</span><br><span class="line">    <span class="keyword">int</span> freq = map.getOrDefault(n, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(n, freq);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这里是直接将map的entry做比较，这样就能有多个元素了，不用新建数组或者实体类</span></span><br><span class="line">Queue&lt;Map.Entry&lt;Integer,Integer&gt;&gt; heap = <span class="keyword">new</span> PriorityQueue&lt;&gt;((a, b) -&gt; a.getValue() - b.getValue());</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里也是维护一个小根堆，但是这里思路和正常有点区别，正常思路是会在k个元素满之后判断元素是否比堆顶大，然后出堆入堆，</span></span><br><span class="line"><span class="comment"> * 这里实现有点不一样，是先入堆，然后在出堆堆顶元素，这里时间复杂度是O(nlog(k+1))，理论上说应该比O(nlogk)慢，</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;Integer,Integer&gt; entry: map.entrySet()) &#123;</span><br><span class="line">    heap.offer(entry);</span><br><span class="line">    <span class="keyword">if</span>(heap.size() &gt; k) &#123;</span><br><span class="line">        heap.poll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">    res[i] = heap.poll().getKey();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> res;</span><br></pre></td></tr></table></figure>
+
+<p>这里的时间复杂度严格来说是O(nlog(k+1))，因为堆里会有k+1个元素，当检测到元素大于k会将堆顶最小元素出堆然后在入堆，这样省略了比较过程，但是时间复杂度高了点，在对性能要求不那么严格的时候也可以这种解法。</p>
+<h4 id="桶排序-1"><a href="#桶排序-1" class="headerlink" title="桶排序"></a>桶排序</h4><p>桶排序的思路是会用1-nums.length这么多个桶，然后遍历整个Map，把Map的Entry放进value的桶里，这时候一个桶可能有多个元素，然后依次从大到小将元素取出来即可。</p>
+<p>这里我一开始想的比较简单直接用一个数组代替一个桶，这样是不行的，桶可能会有多个元素，会存在覆盖的情况，之后再计数排序的场景可以用数组代替桶。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, Integer&gt; countMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> num : nums) &#123;</span><br><span class="line">    countMap.put(num, countMap.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//不能直接用数组记录，因为会存在多个数字出现次数一样，这种用数组会被覆盖</span></span><br><span class="line"><span class="comment">//因此直接在每个数组位置放一个list。</span></span><br><span class="line"><span class="comment">//桶的含义是每个出现次数包含的数字，桶里的元素是多个</span></span><br><span class="line"><span class="comment">//一个桶里会包含所有出现次数为该桶下标的数字</span></span><br><span class="line">List&lt;Integer&gt;[] tong = <span class="keyword">new</span> ArrayList[nums.length + <span class="number">1</span>];</span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;Integer, Integer&gt; num : countMap.entrySet()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (tong[num.getValue()]==<span class="keyword">null</span>) tong[num.getValue()] = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    tong[num.getValue()].add(num.getKey());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line"><span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//因为数组元素赋值是到了nums.length,因此是从nums.length而不是nums.length-1</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = nums.length; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">if</span> (tong[i] == <span class="keyword">null</span>) <span class="keyword">continue</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> n : tong[i]) &#123;</span><br><span class="line">        res[index++] = n;</span><br><span class="line">        <span class="keyword">if</span> (index == k) <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> res;</span><br></pre></td></tr></table></figure>
+
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>我们在做题的时候不要仅仅追求做出来，而要把所有可能的解法都试试，然后比较优劣，对于一些速度比较慢的解法，看看是否能优化将其效率提高。</p>
+<p>有的时候你将一个算法的效率提升了十倍乃至几十倍，那种成就感是空前的！</p>
+<p>享受这种过程，你后面写出的有“坏味道”的代码会越来越少。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A0%86/" rel="tag"># 堆</a>
+              <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" rel="tag"># 哈希表</a>
+              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+              <a href="/tags/%E6%A1%B6/" rel="tag"># 桶</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/26/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC/" rel="prev" title="LeetCode刷题日记-滑动窗口最大值">
+      <i class="fa fa-chevron-left"></i> LeetCode刷题日记-滑动窗口最大值
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E7%94%A8%E5%A0%86"><span class="nav-number">1.</span> <span class="nav-text">运用堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%B6%E6%8E%92%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">桶排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="nav-number"></span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86"><span class="nav-number">1.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%95%E4%B8%80"><span class="nav-number">2.</span> <span class="nav-text">法一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%95%E4%BA%8C"><span class="nav-number">3.</span> <span class="nav-text">法二</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%95%E4%B8%89"><span class="nav-number">4.</span> <span class="nav-text">法三</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%95%E5%9B%9B"><span class="nav-number">5.</span> <span class="nav-text">法四</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%B6%E6%8E%92%E5%BA%8F-1"><span class="nav-number">6.</span> <span class="nav-text">桶排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">7.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Leo Liang</p>
+  <div class="site-description" itemprop="description">你的努力程度决定你能走多远</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leo Liang</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="/" class="theme-link">Leoliang</a> 强力驱动
+  </div>-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
