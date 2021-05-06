@@ -20,22 +20,23 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="B+树一般用来用作数据库存储索引或者存储数据用，B+树为了减少IO访问，一般会要求高度尽可能低，为了保存相同数据又降低高度，因此在二叉搜索树的基础上变成了多叉树。 B+树非叶子节点存的数据都会有个范围，会分别拿子节点的最大或者最小值合在一起。">
+  <meta name="description" content="节后第一天，鉴于五一五天都没做过题，有点遗忘了，今天来看一道简单点的题，练下手。 LeetCode第11题： 123456给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。输入：[1,8,6,2,5">
 <meta property="og:type" content="article">
-<meta property="og:title" content="B+ Tree">
-<meta property="og:url" content="http://example.com/2021/04/16/B-Tree/index.html">
+<meta property="og:title" content="LeetCode刷题日记-盛最多水的容器">
+<meta property="og:url" content="http://example.com/2021/05/06/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/index.html">
 <meta property="og:site_name" content="LeoL&#39;s Bolg">
-<meta property="og:description" content="B+树一般用来用作数据库存储索引或者存储数据用，B+树为了减少IO访问，一般会要求高度尽可能低，为了保存相同数据又降低高度，因此在二叉搜索树的基础上变成了多叉树。 B+树非叶子节点存的数据都会有个范围，会分别拿子节点的最大或者最小值合在一起。">
+<meta property="og:description" content="节后第一天，鉴于五一五天都没做过题，有点遗忘了，今天来看一道简单点的题，练下手。 LeetCode第11题： 123456给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。输入：[1,8,6,2,5">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://img.mp.sohu.com/upload/20170713/0611ff5a5103461e843ab627f8821419_th.png">
-<meta property="article:published_time" content="2021-04-15T16:29:51.000Z">
-<meta property="article:modified_time" content="2021-04-20T14:05:05.464Z">
+<meta property="article:published_time" content="2021-05-06T15:38:28.000Z">
+<meta property="article:modified_time" content="2021-05-06T16:04:09.386Z">
 <meta property="article:author" content="Leo Liang">
-<meta property="article:tag" content="B+树">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="日记">
+<meta property="article:tag" content="数组">
+<meta property="article:tag" content="双指针">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://img.mp.sohu.com/upload/20170713/0611ff5a5103461e843ab627f8821419_th.png">
 
-<link rel="canonical" href="http://example.com/2021/04/16/B-Tree/">
+<link rel="canonical" href="http://example.com/2021/05/06/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
 
 
 <script id="page-configurations">
@@ -48,7 +49,7 @@
   };
 </script>
 
-  <title>B+ Tree | LeoL's Bolg</title>
+  <title>LeetCode刷题日记-盛最多水的容器 | LeoL's Bolg</title>
   
 
 
@@ -169,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/B-Tree/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/06/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -182,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          B+ Tree
+          LeetCode刷题日记-盛最多水的容器
         </h1>
 
         <div class="post-meta">
@@ -192,24 +193,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-16 00:29:51" itemprop="dateCreated datePublished" datetime="2021-04-16T00:29:51+08:00">2021-04-16</time>
+              <time title="创建时间：2021-05-06 23:38:28" itemprop="dateCreated datePublished" datetime="2021-05-06T23:38:28+08:00">2021-05-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 22:05:05" itemprop="dateModified" datetime="2021-04-20T22:05:05+08:00">2021-04-20</time>
+                <time title="修改时间：2021-05-07 00:04:09" itemprop="dateModified" datetime="2021-05-07T00:04:09+08:00">2021-05-07</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%A0%91/" itemprop="url" rel="index"><span itemprop="name">树</span></a>
-                </span>
-            </span>
 
           
 
@@ -222,20 +214,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>B+树一般用来用作数据库存储索引或者存储数据用，B+树为了减少IO访问，一般会要求高度尽可能低，为了保存相同数据又降低高度，因此在二叉搜索树的基础上变成了多叉树。</p>
-<p>B+树非叶子节点存的数据都会有个范围，会分别拿子节点的最大或者最小值合在一起。</p>
+        <p>节后第一天，鉴于五一五天都没做过题，有点遗忘了，今天来看一道简单点的题，练下手。</p>
+<p>LeetCode第11题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, <span class="number">0</span>) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</span><br><span class="line"></span><br><span class="line">输入：[<span class="number">1</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">8</span>,<span class="number">3</span>,<span class="number">7</span>]</span><br><span class="line">输出：<span class="number">49</span> </span><br><span class="line">解释：图中垂直线代表输入数组 [<span class="number">1</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">8</span>,<span class="number">3</span>,<span class="number">7</span>]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 <span class="number">49</span>。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
-<p><img src="http://img.mp.sohu.com/upload/20170713/0611ff5a5103461e843ab627f8821419_th.png"></p>
-<p>而叶子节点会用一个链表串起来，方便查找，实际中应该使用双向链表，方便查找前后元素。除了存储数据外，还会存储卫星数据，所谓的卫星数据是指索引元素所指向的数据记录，比如数据库中某一行。</p>
-<p>而B-树无论是中间节点还是叶子节点都带有卫星数据。</p>
-<p>需要补充的是，在数据库的聚集索引中，叶子节点直接包含卫星数据。在非聚集索引中，叶子节点带有指向卫星数据的指针。<strong>所以非聚合索引会需要再去通过指针查一次，因此速度会慢一点。</strong></p>
-<p>B+树比B-树的优势</p>
-<ol>
-<li>IO次数更少。</li>
-<li>查询性能稳定。</li>
-<li>范围查询简便。（B-树需要中序遍历回到上一层或几层找，B+树直接在链表查询即可）</li>
-</ol>
+<h4 id="暴力法"><a href="#暴力法" class="headerlink" title="暴力法"></a>暴力法</h4><p>一般看完这个题优先的思路是暴力法，两层循环嵌套，然后得到最大值，时间复杂度为O(n^2)，由于官方已经加大了测试用例的规模，暴力法会超时，已经过不了了。</p>
+<p>那我们想想其他的方法吧，在数组和链表两个比较简单的线性表求面积的时候，经常会用到一种思想，<strong>双指针</strong>，这个后面遇到这类题的时候，没思路可以往这方面想。</p>
+<h4 id="双指针"><a href="#双指针" class="headerlink" title="双指针"></a>双指针</h4><p>什么叫双指针呢，顾名思义，就是用两个指针(内存里的指针是记录引用地址的内存空间，这个地址会指向引用的实际存储位置)，记录左右边界位置，然后按照一定条件移动双指针，达到求最大面积的目的。</p>
+<p>以这个题为例，我们要求面积最大值，就需要宽和高足够大就可以，但是我们需要知道柱子的面积最大值，就需要移动左右指针，该怎么定义移动规则呢？</p>
+<p>其实很简单，我们假设左指针<code>left=0</code>，右指针<code>right=a.length-1;</code>，这时候有<code>V=（right-left）*Math.min(a[left],a[right])</code>，然后我们这时候想要得到比这个面积大的区域，首先left和right一定会往中间走，宽一定是会变小的，要使面积变大，就一定要高竟可能大，因此我们舍弃高较小的那根柱子，然后不断重复上述过程，知道left==right。</p>
+<p>我们不难发现，利用双指针法，成功将时间复杂度由O(n^2)降为了O(n).<strong>所以可以知道双指针法能减少一层遍历。</strong></p>
+<p>思路想明白之后代码实现就很简单了，下面是其中一种实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> left = <span class="number">0</span>, right = a.length - <span class="number">1</span>; left &lt; right; ) &#123;</span><br><span class="line">    <span class="keyword">int</span> v = (right - left) * (a[left] &lt; a[right] ? a[left++] : a[right--]);</span><br><span class="line">    max = max &lt; v ? v : max;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> max;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>数组相关的题大多比较简单，很多都是一些固定的模式，一开始可能觉得很神奇，这东西还能这么玩？但是摸清楚套路之后感觉也就那样，所以数组相关的题没啥注意的，多练就行。</p>
 
     </div>
 
@@ -245,7 +241,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/B-%E6%A0%91/" rel="tag"># B+树</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E6%97%A5%E8%AE%B0/" rel="tag"># 日记</a>
+              <a href="/tags/%E6%95%B0%E7%BB%84/" rel="tag"># 数组</a>
+              <a href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/" rel="tag"># 双指针</a>
           </div>
 
         
@@ -253,11 +252,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2021/04/19/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-K%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/" rel="next" title="LeetCode刷题日记:K个一组翻转链表">
-      LeetCode刷题日记:K个一组翻转链表 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/04/27/LeetCode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-%E5%89%8DK%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/" rel="prev" title="LeetCode刷题日记-前K个高频元素">
+      <i class="fa fa-chevron-left"></i> LeetCode刷题日记-前K个高频元素
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -316,6 +315,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">暴力法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E6%8C%87%E9%92%88"><span class="nav-number">2.</span> <span class="nav-text">双指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
